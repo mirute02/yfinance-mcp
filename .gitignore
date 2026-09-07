@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local work files
+*.log
+.claude/
+.mcp.json
+.DS_Store
