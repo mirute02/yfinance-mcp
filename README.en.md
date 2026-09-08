@@ -68,6 +68,19 @@ The server speaks stdio. Verify it standalone with:
 
 **It is deliberately not a harvester.** Upstream requests are paced at one per 0.5 s and capped at 1000 per UTC day; past that every tool returns an error until the budget resets. `get_usage_budget` reports where you stand. The ceiling is adjustable with `YFINANCE_MCP_DAILY_LIMIT`, but it is there because the scale of use is the whole question under Yahoo's terms — this server answers questions about a handful of companies, and the code says so rather than leaving it to a README promise.
 
+## Tests
+
+```bash
+pip install pytest
+python -m pytest tests/ -q
+```
+
+39 tests, none of which reach the network. CI runs them on Python 3.11-3.13.
+
+## Security
+
+[docs/security.md](docs/security.md) sets out that the server holds no credentials, is read-only and outbound-only, how untrusted `symbol` values are handled, and what is deliberately left undone.
+
 ## Data terms
 
 This project is **not affiliated with, endorsed by, or vetted by Yahoo**. It builds on [yfinance](https://github.com/ranaroussi/yfinance), whose own README states that it is "intended for research and educational purposes" and that "the Yahoo! finance API is intended for personal use only."
@@ -78,4 +91,4 @@ This server does nothing to circumvent that: it fetches one ticker per call, add
 
 ## Licence
 
-MIT — see [LICENSE](LICENSE). `yfinance` is Apache-2.0; `mcp` is MIT.
+MIT — see [LICENSE](LICENSE). Dependency licences, read from the installed distributions rather than their READMEs, are in [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).

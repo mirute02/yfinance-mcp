@@ -68,6 +68,19 @@ stdio で通信する。単体での起動確認は次のとおり。
 
 **意図的に大量収集はできないようにしてある。** 上流への要求は0.5秒に1回へ抑え、UTC日付で1日1000件を上限としている。超えると、リセットまで全ツールがエラーを返す。残量は `get_usage_budget` で確認できる。上限は `YFINANCE_MCP_DAILY_LIMIT` で変更できるが、そもそもこの制限を置いているのは、Yahoo の規約において**利用の規模こそが論点**だからである。このサーバーは数社について調べるためのものであり、それを README の約束ではなくコードで示している。
 
+## テスト
+
+```bash
+pip install pytest
+python -m pytest tests/ -q
+```
+
+39件。いずれもネットワークに接続しない。CI で Python 3.11〜3.13 上を通している。
+
+## セキュリティ
+
+[docs/security.md](docs/security.md) に、認証情報を持たないこと、読み取り専用かつ外向きのみであること、信頼できない `symbol` の扱い、意図的にやっていないことを書いてある。
+
 ## データの利用条件
 
 本プロジェクトは **Yahoo とは無関係で、承認も検証も受けていない**。[yfinance](https://github.com/ranaroussi/yfinance) を利用しており、yfinance 自身の README も「研究・教育目的を想定」「Yahoo! finance API は個人利用のみを想定している」と明記している。
@@ -78,4 +91,4 @@ stdio で通信する。単体での起動確認は次のとおり。
 
 ## ライセンス
 
-MIT — [LICENSE](LICENSE) を参照。`yfinance` は Apache-2.0、`mcp` は MIT。
+MIT — [LICENSE](LICENSE) を参照。依存のライセンスは（READMEの記述ではなくインストール済みディストリビューションから読み取って）[THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) に記載。
