@@ -10,8 +10,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
+        # mcp 2.x renamed FastMCP to MCPServer. Both are supported, so both
+        # are exercised — a lower bound alone would let this rot silently.
+        mcp-version: ["<2", ">=2"]
+    name: py${{ matrix.python-version }} / mcp${{ matrix.mcp-version }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -21,8 +26,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt pytest
+          pip install "mcp[cli]${{ matrix.mcp-version }}"
+      - name: Show resolved versions
+        run: pip show mcp yfinance pandas | grep -E "^(Name|Version)"
       - name: Compile
         run: python -m py_compile server.py
       - name: Test
         run: python -m pytest tests/ -q
-      # The tests are offline; no call reaches Yahoo.
+      # Offline: no call reaches Yahoo, no credentials needed.

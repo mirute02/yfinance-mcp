@@ -21,9 +21,15 @@ from typing import Literal
 
 import pandas as pd
 import yfinance as yf
-from mcp.server.fastmcp import FastMCP
+# mcp 2.x renamed FastMCP to MCPServer and moved it. The decorator and run()
+# signatures this server relies on are unchanged, so support both rather than
+# pinning users to whichever major happens to be current.
+try:
+    from mcp.server.fastmcp import FastMCP as MCPServer   # mcp 1.x
+except ModuleNotFoundError:                                # pragma: no cover
+    from mcp.server.mcpserver import MCPServer            # mcp 2.x
 
-mcp = FastMCP("yfinance")
+mcp = MCPServer("yfinance")
 
 # ── Response cache ──────────────────────────────────────────
 # Bounded and lock-protected: an MCP server is long-lived and FastMCP may call
